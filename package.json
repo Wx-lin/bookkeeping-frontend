@@ -1,0 +1,36 @@
+{
+  "name": "rn-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "format": "prettier --write .",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "~54.0.27",
+    "expo-status-bar": "~3.0.9",
+    "react": "19.1.0",
+    "react-native": "0.81.5"
+  },
+  "private": true,
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.3",
+    "@types/react": "~19.1.10",
+    "@types/react-native": "^0.72.8",
+    "@typescript-eslint/eslint-plugin": "^8.48.1",
+    "@typescript-eslint/parser": "^8.48.1",
+    "eslint": "^9.39.1",
+    "eslint-config-expo": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-native": "^5.0.0",
+    "prettier": "^3.7.4",
+    "typescript": "~5.9.2"
+  }
+}
