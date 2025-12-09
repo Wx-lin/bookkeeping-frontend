@@ -67,3 +67,19 @@ npx expo run:ios
     *   尝试清理构建缓存：`cd ios && xcodebuild clean`。
 *   **CocoaPods SSL 错误**：
     *   确认 Ruby 和 Gem 源配置正确（推荐使用 `rubygems.org`）。
+
+## 5. 项目目录结构说明
+
+```text
+rn-app/
+├── assets/             # 静态资源目录（应用图标、启动页图片等）
+├── ios/                # iOS 原生工程代码（Xcode 项目文件、Podfile 等）
+├── android/            # Android 原生工程代码（Gradle 构建文件等，如已生成）
+├── App.tsx             # 项目主入口组件，你的大部分代码将从这里开始
+├── app.json            # Expo 配置文件（设置应用名称、版本、图标路径等）
+├── index.js            # App 注册入口（通常不需要修改）
+├── package.json        # 项目依赖和脚本配置文件
+├── tsconfig.json       # TypeScript 配置文件
+├── .eslintrc.js        # 代码规范检查配置
+└── .prettierrc         # 代码格式化配置
+```
