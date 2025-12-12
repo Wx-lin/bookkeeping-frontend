@@ -1,6 +1,7 @@
+import type { FC } from 'react'
 import { Text, View } from 'react-native'
 
-export default function HomeScreen() {
+const HomeScreen: FC = () => {
   return (
     <View className="flex-1 items-center justify-center">
       <Text className="text-xl font-bold mb-2.5">Hello from src/screens/HomeScreen!</Text>
@@ -8,3 +9,5 @@ export default function HomeScreen() {
     </View>
   )
 }
+
+export default HomeScreen

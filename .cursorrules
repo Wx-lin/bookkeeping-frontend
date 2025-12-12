@@ -1,0 +1,184 @@
+# React Native + TypeScript Project Rules
+
+## Project Context
+This is a React Native Expo project using TypeScript, NativeWind (Tailwind CSS), and React Native Reusables component library.
+
+## Tech Stack
+- **Framework**: React Native with Expo
+- **Language**: TypeScript (strict mode enabled)
+- **Styling**: NativeWind (Tailwind CSS for React Native)
+- **Component Library**: React Native Reusables (https://reactnativereusables.com/)
+- **State Management**: React Hooks
+- **Navigation**: (to be determined based on project needs)
+
+## Code Style & Best Practices
+
+### TypeScript Rules
+1. **Strict Type Checking**: Always use TypeScript strict mode. No `any` types unless absolutely necessary.
+2. **Type Imports**: Use `import type` for type-only imports to improve build performance.
+3. **Function Types**: Define clear function signatures with parameter and return types.
+4. **Component Props**: Always define explicit prop types using interfaces or type aliases.
+5. **Avoid Type Assertions**: Use type guards instead of type assertions when possible.
+
+Example:
+```typescript
+import type { FC } from 'react'
+import type { ViewProps } from 'react-native'
+
+interface CustomComponentProps extends ViewProps {
+  title: string
+  onPress: () => void
+  isActive?: boolean
+}
+
+const CustomComponent: FC<CustomComponentProps> = ({ title, onPress, isActive = false }) => {
+  // Component implementation
+}
+```
+
+### React Native Component Rules
+1. **Functional Components**: Always use functional components with hooks, never class components.
+2. **Component Structure**: Follow this order:
+   - Imports (third-party first, then local)
+   - Type definitions
+   - Component definition
+   - Styles (if using StyleSheet, but prefer Tailwind)
+   - Exports
+
+3. **Hooks Order**: Follow React's rules of hooks:
+   - useState
+   - useEffect
+   - Custom hooks
+   - useCallback/useMemo
+
+4. **Component Naming**: Use PascalCase for components, camelCase for functions.
+
+### NativeWind / Tailwind CSS Rules
+1. **Class Names**: Use the `className` prop with Tailwind utility classes.
+2. **Responsive Design**: Use Tailwind's responsive prefixes when needed.
+3. **Custom Colors**: Define custom colors in `tailwind.config.js` and use them via Tailwind classes.
+4. **Avoid Inline Styles**: Prefer Tailwind classes over inline styles for consistency.
+5. **Component Variants**: Use `class-variance-authority` for component variants.
+
+Example:
+```typescript
+<View className="flex-1 items-center justify-center bg-white px-4">
+  <Text className="text-xl font-bold text-gray-900 mb-4">
+    Title
+  </Text>
+</View>
+```
+
+### React Native Reusables Component Library
+1. **Import Components**: Always import components from the React Native Reusables library when available.
+2. **Follow Documentation**: Refer to https://reactnativereusables.com/ for component usage.
+3. **Customization**: Use the library's built-in customization options before creating custom components.
+4. **Consistency**: Use library components consistently across the app for a unified UI.
+
+### File Organization
+```
+src/
+├── screens/          # Screen components
+├── components/       # Reusable components
+│   ├── ui/          # UI components (buttons, inputs, etc.)
+│   └── common/      # Common components (headers, footers, etc.)
+├── hooks/           # Custom React hooks
+├── utils/           # Utility functions
+├── types/           # TypeScript type definitions
+├── services/        # API services
+├── constants/       # App constants
+└── lib/            # Third-party library configurations
+```
+
+### Naming Conventions
+- **Components**: PascalCase (e.g., `UserProfile.tsx`)
+- **Hooks**: camelCase with 'use' prefix (e.g., `useAuth.ts`)
+- **Utils**: camelCase (e.g., `formatDate.ts`)
+- **Types**: PascalCase with descriptive names (e.g., `UserProfile`, `ApiResponse`)
+- **Constants**: UPPER_SNAKE_CASE (e.g., `API_BASE_URL`)
+
+### Code Quality Rules
+1. **No Console Logs**: Remove console.log statements before committing. Use console.warn or console.error for debugging.
+2. **Error Handling**: Always handle errors gracefully with try-catch blocks.
+3. **Loading States**: Show loading indicators for async operations.
+4. **Empty States**: Handle empty data states with meaningful messages.
+5. **Accessibility**: Add accessibility labels to interactive elements.
+
+### Performance Best Practices
+1. **Memoization**: Use `React.memo`, `useMemo`, and `useCallback` for expensive operations.
+2. **List Optimization**: Use `FlatList` with `keyExtractor` and `getItemLayout` for long lists.
+3. **Image Optimization**: Use appropriate image sizes and formats.
+4. **Lazy Loading**: Load components and data lazily when possible.
+
+### Git Commit Guidelines
+- Use conventional commits format: `type(scope): message`
+- Types: feat, fix, docs, style, refactor, test, chore
+- Keep commits atomic and focused on a single change
+- Write clear and descriptive commit messages
+
+### Testing Guidelines
+1. **Unit Tests**: Write unit tests for utility functions and hooks.
+2. **Component Tests**: Test component rendering and user interactions.
+3. **Integration Tests**: Test complete user flows.
+
+### Import Order
+1. React and React Native imports
+2. Third-party libraries
+3. Components
+4. Hooks
+5. Utils and helpers
+6. Types
+7. Constants
+8. Styles (if using StyleSheet)
+
+Example:
+```typescript
+import { useState, useEffect } from 'react'
+import { View, Text, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+
+import { Button } from '~/components/ui/Button'
+import { useAuth } from '~/hooks/useAuth'
+import { formatDate } from '~/utils/formatDate'
+import type { User } from '~/types/user'
+import { API_BASE_URL } from '~/constants/api'
+```
+
+### Comments and Documentation
+1. **JSDoc Comments**: Use JSDoc for public functions and components.
+2. **Inline Comments**: Add comments for complex logic, but prefer self-documenting code.
+3. **TODO Comments**: Use `// TODO:` for future improvements.
+4. **FIXME Comments**: Use `// FIXME:` for known issues.
+
+### Security Best Practices
+1. **Sensitive Data**: Never commit API keys, tokens, or sensitive data.
+2. **Environment Variables**: Use environment variables for configuration.
+3. **Input Validation**: Always validate user inputs.
+4. **Secure Storage**: Use secure storage for sensitive data (e.g., react-native-encrypted-storage).
+
+## Code Review Checklist
+- [ ] TypeScript types are properly defined
+- [ ] No `any` types (unless absolutely necessary)
+- [ ] Components follow the established structure
+- [ ] Tailwind classes are used instead of inline styles
+- [ ] Error handling is implemented
+- [ ] Loading states are shown
+- [ ] Code is formatted with Prettier
+- [ ] No console.log statements
+- [ ] Imports are organized properly
+- [ ] Component is memoized if needed
+- [ ] Accessibility labels are added
+
+## AI Assistant Guidelines
+When working on this project:
+1. Always write clean, readable, and maintainable code.
+2. Follow TypeScript strict mode - no implicit any types.
+3. Use NativeWind/Tailwind for all styling.
+4. Prefer React Native Reusables components over custom implementations.
+5. Write descriptive variable and function names.
+6. Add appropriate error handling and loading states.
+7. Keep components small and focused on a single responsibility.
+8. Use custom hooks to extract reusable logic.
+9. Optimize for performance (memoization, list virtualization).
+10. Write self-documenting code with clear naming and structure.
+
