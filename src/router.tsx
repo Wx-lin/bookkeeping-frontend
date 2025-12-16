@@ -1,11 +1,3 @@
-/*
- * @Author: 王薪林 10655211+wang-xinlinlin@user.noreply.gitee.com
- * @Date: 2025-12-12 21:43:21
- * @LastEditors: 王薪林 10655211+wang-xinlinlin@user.noreply.gitee.com
- * @LastEditTime: 2025-12-14 20:50:06
- * @FilePath: /rn/rn-app/src/router.tsx
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 import {
   createRouter,
   createRootRoute,
@@ -14,6 +6,7 @@ import {
   createMemoryHistory,
 } from '@tanstack/react-router'
 import HomeScreen from './screens/HomeScreen'
+import { AuthPage } from './screens/Login'
 import { View } from 'react-native'
 
 // 创建根路由
@@ -32,12 +25,19 @@ const indexRoute = createRoute({
   component: HomeScreen,
 })
 
+// 创建登录页路由
+const loginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/login',
+  component: AuthPage,
+})
+
 // 创建路由树
-const routeTree = rootRoute.addChildren([indexRoute])
+const routeTree = rootRoute.addChildren([indexRoute, loginRoute])
 
 // 创建内存历史记录（React Native 必须使用内存路由）
 const memoryHistory = createMemoryHistory({
-  initialEntries: ['/'], // 默认进入登录页
+  initialEntries: ['/login'], // 默认进入登录页
 })
 
 // 创建路由器实例
