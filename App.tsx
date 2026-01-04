@@ -7,15 +7,21 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { router } from './src/router'
 import { ReactQueryProvider } from './src/providers/query-provider'
 import { Toaster } from 'sonner-native'
+import { useColorScheme } from 'nativewind'
 
 const App: FC = () => {
+  const { colorScheme } = useColorScheme()
+
   return (
     <SafeAreaProvider>
       <ReactQueryProvider>
         <View className="flex-1 bg-white">
           <RouterProvider router={router} />
           <StatusBar style="auto" />
-          <Toaster />
+          <Toaster 
+            position="top-center"
+            theme={colorScheme}
+          />
         </View>
       </ReactQueryProvider>
     </SafeAreaProvider>
