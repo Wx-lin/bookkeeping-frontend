@@ -8,6 +8,7 @@ import { router } from './src/router'
 import { ReactQueryProvider } from './src/providers/query-provider'
 import { Toaster } from 'sonner-native'
 import { useColorScheme } from 'nativewind'
+import { cn } from '~/lib/utils'
 
 const App: FC = () => {
   const { colorScheme } = useColorScheme()
@@ -15,13 +16,10 @@ const App: FC = () => {
   return (
     <SafeAreaProvider>
       <ReactQueryProvider>
-        <View className="flex-1 bg-white">
+        <View className={cn('flex-1 bg-background', `theme-${colorScheme}`)}>
           <RouterProvider router={router} />
           <StatusBar style="auto" />
-          <Toaster 
-            position="top-center"
-            theme={colorScheme}
-          />
+          <Toaster richColors closeButton position="top-center" theme={colorScheme} />
         </View>
       </ReactQueryProvider>
     </SafeAreaProvider>
