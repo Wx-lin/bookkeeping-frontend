@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import {
   View,
-  Text,
   Pressable,
   ScrollView,
   KeyboardAvoidingView,
@@ -13,6 +12,7 @@ import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { Card } from '~/components/ui/card'
+import { Text } from '~/components/ui/text'
 import { ThemeToggle } from '~/components/theme-toggle'
 import { cn } from '~/lib/utils'
 import { iconWithClassName } from '~/lib/icons/icon-with-classname'
@@ -226,7 +226,7 @@ export function AuthPage() {
                 {/* Footer Links */}
                 {mode === 'login' ? (
                   <View className="items-center">
-                    <Pressable>
+                    <Pressable onPress={() => Alert.alert('提示', '功能开发中')}>
                       <Text className="text-sm text-muted-foreground active:text-amber-600">
                         忘记密码？
                       </Text>
@@ -237,11 +237,11 @@ export function AuthPage() {
                     <Text className="text-xs text-center text-muted-foreground leading-relaxed">
                       点击注册即表示您同意我们的
                     </Text>
-                    <Pressable className="mx-1">
+                    <Pressable className="mx-1" onPress={() => Alert.alert('提示', '功能开发中')}>
                       <Text className="text-xs text-amber-600">服务条款</Text>
                     </Pressable>
                     <Text className="text-xs text-muted-foreground">和</Text>
-                    <Pressable className="ml-1">
+                    <Pressable className="ml-1" onPress={() => Alert.alert('提示', '功能开发中')}>
                       <Text className="text-xs text-amber-600">隐私政策</Text>
                     </Pressable>
                   </View>

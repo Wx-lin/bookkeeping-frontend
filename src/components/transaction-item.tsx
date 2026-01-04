@@ -1,8 +1,9 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { Transaction } from '~/lib/api';
 import { cn } from '~/lib/utils';
 import { Utensils, Bus, ShoppingBag, Coffee, HelpCircle } from 'lucide-react-native';
 import { iconWithClassName } from '~/lib/icons/icon-with-classname';
+import { Text } from '~/components/ui/text';
 
 // Register icons
 iconWithClassName(Utensils);
@@ -49,7 +50,7 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
       </View>
       
       <View className="flex-1">
-        <Text className="text-base font-medium text-foreground">
+        <Text className="text-base font-medium">
           {transaction.category?.name || '未分类'}
         </Text>
         <Text className="text-sm text-muted-foreground mt-0.5">

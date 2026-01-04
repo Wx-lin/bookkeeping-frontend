@@ -1,15 +1,15 @@
-import React, { useState, useMemo } from 'react';
-import { View, Text, SectionList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useState, useMemo } from 'react';
+import { View, SectionList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { format, startOfMonth, endOfMonth, isToday, isYesterday, parseISO } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
-import { ChevronDown, Sun, Moon, Plus, List, PieChart, Wallet } from 'lucide-react-native';
-import { useColorScheme } from 'nativewind';
+import { ChevronDown, Plus, List, PieChart, Wallet } from 'lucide-react-native';
 import { api, Transaction } from '~/lib/api';
 import { SummaryCard } from '~/components/summary-card';
 import { TransactionItem } from '~/components/transaction-item';
 import { iconWithClassName } from '~/lib/icons/icon-with-classname';
 import { ThemeToggle } from '~/components/theme-toggle';
+import { Text } from '~/components/ui/text';
 
 iconWithClassName(ChevronDown);
 iconWithClassName(Plus);
@@ -18,7 +18,7 @@ iconWithClassName(PieChart);
 iconWithClassName(Wallet);
 
 export default function DetailScreen() {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate] = useState(new Date());
 
   const startDate = format(startOfMonth(currentDate), 'yyyy-MM-dd');
   const endDate = format(endOfMonth(currentDate), 'yyyy-MM-dd');
@@ -89,10 +89,10 @@ export default function DetailScreen() {
       {/* Top Bar */}
       <View className="flex-row justify-between items-center mb-6">
         <TouchableOpacity className="flex-row items-center">
-          <Text className="text-xl font-bold text-foreground mr-1">
+          <Text className="text-xl font-bold mr-1">
             {format(currentDate, 'MM月', { locale: zhCN })}
           </Text>
-           <Text className="text-base text-foreground mr-2">
+           <Text className="text-base mr-2">
             {format(currentDate, 'LLLL', { locale: zhCN })}
           </Text>
           <ChevronDown className="h-4 w-4 text-foreground" />
@@ -103,7 +103,7 @@ export default function DetailScreen() {
         </View>
       </View>
       
-      <Text className="text-3xl font-extrabold text-foreground mb-6">明细</Text>
+      <Text className="text-3xl font-extrabold mb-6">明细</Text>
 
       {/* Summary Card */}
       <SummaryCard 

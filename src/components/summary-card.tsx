@@ -1,7 +1,9 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { TrendingDown, TrendingUp } from 'lucide-react-native';
 import { iconWithClassName } from '~/lib/icons/icon-with-classname';
 import { cn } from '~/lib/utils';
+import { Text } from '~/components/ui/text';
+import { Card } from '~/components/ui/card';
 
 iconWithClassName(TrendingDown);
 iconWithClassName(TrendingUp);
@@ -19,7 +21,7 @@ export function SummaryCard({ income, expense, balance }: SummaryCardProps) {
   const incomePercent = Math.min((income / totalFlow) * 100, 100);
 
   return (
-    <View className="bg-card rounded-3xl p-5 mb-6 border border-border shadow-sm">
+    <Card className="rounded-3xl p-5 mb-6">
       <View className="flex-row justify-between mb-6">
         {/* Expense Column */}
         <View className="flex-1 mr-4">
@@ -29,11 +31,11 @@ export function SummaryCard({ income, expense, balance }: SummaryCardProps) {
             </View>
             <Text className="text-sm text-muted-foreground">本月支出</Text>
           </View>
-          <Text className="text-2xl font-bold text-foreground mb-2">
+          <Text className="text-2xl font-bold mb-2">
             ¥{expense.toFixed(2)}
           </Text>
           <View className="h-1.5 bg-secondary rounded-full overflow-hidden">
-            <View 
+             <View 
               className="h-full bg-primary rounded-full" 
               style={{ width: `${expensePercent}%` }} 
             />
@@ -52,7 +54,7 @@ export function SummaryCard({ income, expense, balance }: SummaryCardProps) {
             </View>
             <Text className="text-sm text-muted-foreground">本月收入</Text>
           </View>
-          <Text className="text-2xl font-bold text-foreground mb-2">
+          <Text className="text-2xl font-bold mb-2">
             ¥{income.toFixed(2)}
           </Text>
           <View className="h-1.5 bg-secondary rounded-full overflow-hidden">
@@ -76,6 +78,6 @@ export function SummaryCard({ income, expense, balance }: SummaryCardProps) {
           {balance >= 0 ? '+' : ''}¥{balance.toFixed(2)}
         </Text>
       </View>
-    </View>
+    </Card>
   );
 }
