@@ -1,5 +1,13 @@
 import { useState } from 'react'
-import { View, Text, Pressable, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
+} from 'react-native'
 import { Mail, KeyRound, CheckCircle2, TrendingUp, Wallet } from 'lucide-react-native'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
@@ -8,6 +16,10 @@ import { Card } from '~/components/ui/card'
 import { ThemeToggle } from '~/components/theme-toggle'
 import { cn } from '~/lib/utils'
 import { iconWithClassName } from '~/lib/icons/icon-with-classname'
+import { api } from '~/lib/api'
+import { useAuthStore } from '~/stores/auth'
+import { router } from '~/router'
+import { useMutation } from '@tanstack/react-query'
 
 // Register icons for className support
 iconWithClassName(Mail)
@@ -24,9 +36,53 @@ export function AuthPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
-  const handleSubmit = () => {
-    // Handle authentication logic here
-    console.log({ mode, email, password })
+  const login = useAuthStore((state) => state.login)
+
+  const loginMutation = useMutation({
+    mutationFn: api.auth.login,
+    onSuccess: async (data: any) => {
+      // 这里的 data 已经是 AuthResponse，因为拦截器处理过
+      await login(data.access_token, data.user)
+      Alert.alert('成功', '登录成功')
+      router.navigate({ to: '/' })
+    },
+    onError: (error: any) => {
+      const msg = error.response?.data?.message || error.message || '登录失败'
+      Alert.alert('错误', Array.isArray(msg) ? msg[0] : msg)
+    },
+  })
+
+  const registerMutation = useMutation({
+    mutationFn: api.auth.signup,
+    onSuccess: async (data: any) => {
+      await login(data.access_token, data.user)
+      Alert.alert('成功', '注册成功')
+      router.navigate({ to: '/' })
+    },
+    onError: (error: any) => {
+      const msg = error.response?.data?.message || error.message || '注册失败'
+      Alert.alert('错误', Array.isArray(msg) ? msg[0] : msg)
+    },
+  })
+
+  const isLoading = loginMutation.isPending || registerMutation.isPending
+
+  const handleSubmit = async () => {
+    if (!email || !password) {
+      Alert.alert('提示', '请输入邮箱和密码')
+      return
+    }
+
+    if (mode === 'register' && password !== confirmPassword) {
+      Alert.alert('提示', '两次输入的密码不一致')
+      return
+    }
+
+    if (mode === 'login') {
+      loginMutation.mutate({ email, password })
+    } else {
+      registerMutation.mutate({ email, password })
+    }
   }
 
   return (
@@ -113,6 +169,8 @@ export function AuthPage() {
                       placeholder={mode === 'login' ? '邮箱/用户名' : '邮箱'}
                       value={email}
                       onChangeText={setEmail}
+                      autoCapitalize="none"
+                      keyboardType="email-address"
                       className="pl-12 h-12 bg-background/50 border-border/50"
                     />
                   </View>
@@ -157,10 +215,11 @@ export function AuthPage() {
                 {/* Submit Button */}
                 <Button
                   onPress={handleSubmit}
+                  disabled={isLoading}
                   className="w-full h-12 bg-amber-500 active:bg-amber-600 shadow-lg shadow-amber-500/30"
                 >
                   <Text className="text-white font-medium text-lg">
-                    {mode === 'login' ? '登录' : '注册新账号'}
+                    {isLoading ? '处理中...' : mode === 'login' ? '登录' : '注册新账号'}
                   </Text>
                 </Button>
 

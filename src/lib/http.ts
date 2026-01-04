@@ -1,4 +1,6 @@
-import axios from 'axios';
+import axios from 'axios'
+import { useAuthStore } from '~/stores/auth'
+import { toast } from 'sonner-native'
 
 // 创建 axios 实例
 export const http = axios.create({
@@ -7,52 +9,55 @@ export const http = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-});
+})
 
 // 请求拦截器
 http.interceptors.request.use(
   (config) => {
-    // TODO: 在这里添加 token
-    // const token = await getToken();
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
-    return config;
+    // 从 Zustand store 获取 token
+    const token = useAuthStore.getState().token
+    if (token) {
+      config.headers.token = token // 根据 API 文档，header key 是 'token' 而不是 'Authorization'
+    }
+    return config
   },
   (error) => {
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
-);
+)
 
 // 响应拦截器
 http.interceptors.response.use(
   (response) => {
     // 直接返回 data，这样我们在业务代码中就不需要多解构一层 .data
-    return response.data;
+    return response.data
   },
   (error) => {
     // 统一错误处理
+    const message = error.response?.data?.message || error.message || '未知错误'
+
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          // TODO: 处理未登录情况，跳转到登录页
-          console.log('未授权，请登录');
-          break;
+          // 401 未授权，登出并跳转
+          toast.error('登录过期', { description: '请重新登录' })
+          useAuthStore.getState().logout()
+          break
         case 403:
-          console.log('拒绝访问');
-          break;
+          toast.error('权限不足', { description: message })
+          break
         case 404:
-          console.log('请求的资源不存在');
-          break;
+          toast.error('资源未找到', { description: '请求的资源不存在' })
+          break
         case 500:
-          console.log('服务器错误');
-          break;
+          toast.error('服务器错误', { description: '服务器发生内部错误，请稍后重试' })
+          break
         default:
-          console.log('发生错误', error.message);
+          toast.error(message)
       }
     } else {
-      console.log('网络错误', error.message);
+      toast.error('网络错误', { description: '请检查您的网络连接' })
     }
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
-);
+)

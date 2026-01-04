@@ -6,6 +6,7 @@ import { RouterProvider } from '@tanstack/react-router'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { router } from './src/router'
 import { ReactQueryProvider } from './src/providers/query-provider'
+import { Toaster } from 'sonner-native'
 
 const App: FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: FC = () => {
         <View className="flex-1 bg-white">
           <RouterProvider router={router} />
           <StatusBar style="auto" />
+          <Toaster />
         </View>
       </ReactQueryProvider>
     </SafeAreaProvider>
