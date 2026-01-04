@@ -16,8 +16,11 @@ http.interceptors.request.use(
   (config) => {
     // 从 Zustand store 获取 token
     const token = useAuthStore.getState().token
+
+    console.log('token', token)
+
     if (token) {
-      config.headers.token = token // 根据 API 文档，header key 是 'token' 而不是 'Authorization'
+      config.headers.token = token
     }
     return config
   },
@@ -29,7 +32,9 @@ http.interceptors.request.use(
 // 响应拦截器
 http.interceptors.response.use(
   (response) => {
-    // 直接返回 data，这样我们在业务代码中就不需要多解构一层 .data
+    if (response.data && response.data.data) {
+      return response.data.data
+    }
     return response.data
   },
   (error) => {

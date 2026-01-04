@@ -11,7 +11,7 @@ export interface User {
 }
 
 export interface AuthResponse {
-  access_token: string;
+  token: string;
   user: User;
 }
 
@@ -51,6 +51,16 @@ export interface ChatMessage {
   cardType?: string;
   cardData?: string; // JSON string
   createdAt: string;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
 }
 
 // --- DTOs ---
@@ -110,7 +120,7 @@ export const api = {
   },
   transactions: {
     list: (params?: { startDate?: string; endDate?: string; accountId?: number; categoryId?: number }) => 
-      http.get<Transaction[]>('/transactions', { params }),
+      http.get<PaginatedResponse<Transaction>>('/transactions', { params }) as unknown as Promise<PaginatedResponse<Transaction>>,
     create: (data: CreateTransactionDto) => http.post<Transaction>('/transactions', data),
     update: (id: number, data: Partial<CreateTransactionDto>) => http.patch<Transaction>(`/transactions/${id}`, data),
     delete: (id: number) => http.delete(`/transactions/${id}`),

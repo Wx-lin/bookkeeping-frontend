@@ -42,7 +42,7 @@ export function AuthPage() {
     mutationFn: api.auth.login,
     onSuccess: async (data: any) => {
       // 这里的 data 已经是 AuthResponse，因为拦截器处理过
-      await login(data.access_token, data.user)
+      await login(data.token, data.user)
       Alert.alert('成功', '登录成功')
       router.navigate({ to: '/' })
     },
