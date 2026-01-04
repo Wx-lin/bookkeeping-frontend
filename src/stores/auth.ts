@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from '~/lib/api';
-import { router } from '~/router';
 
 const TOKEN_KEY = 'auth_token';
 const USER_KEY = 'auth_user';
@@ -34,7 +33,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     await AsyncStorage.removeItem(TOKEN_KEY);
     await AsyncStorage.removeItem(USER_KEY);
     set({ token: null, user: null, isAuthenticated: false });
-    router.navigate({ to: '/login' });
   },
 
   initialize: async () => {

@@ -18,7 +18,7 @@ import { cn } from '~/lib/utils'
 import { iconWithClassName } from '~/lib/icons/icon-with-classname'
 import { api } from '~/lib/api'
 import { useAuthStore } from '~/stores/auth'
-import { router } from '~/router'
+import { useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 
 // Register icons for className support
@@ -31,6 +31,7 @@ iconWithClassName(Wallet)
 type AuthMode = 'login' | 'register'
 
 export function AuthPage() {
+  const router = useRouter()
   const [mode, setMode] = useState<AuthMode>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
