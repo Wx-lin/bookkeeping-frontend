@@ -165,9 +165,8 @@ export function AuthPage() {
                   placeholder={mode === 'login' ? '邮箱/用户名' : '邮箱'}
                   value={email}
                   onChangeText={setEmail}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  className="pl-14 bg-muted/30 border-border/50 rounded-2xl"
+                  textAlignVertical="center"
+                  className="pl-14 bg-muted/30 border-border/50 rounded-2xl py-0 leading-none"
                 />
               </View>
             </View>
@@ -185,7 +184,8 @@ export function AuthPage() {
                   placeholder={mode === 'login' ? '密码' : '设置密码'}
                   value={password}
                   onChangeText={setPassword}
-                  className="pl-14 bg-muted/30 border-border/50 rounded-2xl"
+                  textAlignVertical="center"
+                  className="pl-14 bg-muted/30 border-border/50 rounded-2xl py-0"
                 />
               </View>
             </View>
@@ -204,7 +204,8 @@ export function AuthPage() {
                     placeholder="确认密码"
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
-                    className="pl-14 bg-muted/30 border-border/50 rounded-2xl"
+                    textAlignVertical="center"
+                    className="pl-14 bg-muted/30 border-border/50 rounded-2xl py-0"
                   />
                 </View>
               </View>

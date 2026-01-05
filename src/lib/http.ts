@@ -1,10 +1,27 @@
 import axios from 'axios'
+import Constants from 'expo-constants'
 import { useAuthStore } from '~/stores/auth'
 import { toast } from 'sonner-native'
 
+// 动态获取开发环境的主机 IP
+const getBaseUrl = () => {
+  // 在开发环境下，尝试获取 Expo Go 的主机 IP
+  const debuggerHost = Constants.expoConfig?.hostUri
+  const localhost = debuggerHost?.split(':')[0]
+
+  if (localhost) {
+    console.log('Using API Base URL:', `http://${localhost}:3000`)
+    return `http://${localhost}:3000`
+  }
+
+  // 默认回退到 localhost (模拟器或 Web 环境)
+  console.log('Using API Base URL: http://localhost:3000')
+  return 'http://localhost:3000'
+}
+
 // 创建 axios 实例
 export const http = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: getBaseUrl(),
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
