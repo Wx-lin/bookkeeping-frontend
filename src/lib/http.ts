@@ -5,13 +5,17 @@ import { toast } from 'sonner-native'
 
 // 动态获取开发环境的主机 IP
 const getBaseUrl = () => {
-  // 在开发环境下，尝试获取 Expo Go 的主机 IP
-  const debuggerHost = Constants.expoConfig?.hostUri
-  const localhost = debuggerHost?.split(':')[0]
+  try {
+    // 在开发环境下，尝试获取 Expo Go 的主机 IP
+    const debuggerHost = Constants.expoConfig?.hostUri
+    const localhost = debuggerHost?.split(':')[0]
 
-  if (localhost) {
-    console.log('Using API Base URL:', `http://${localhost}:3000`)
-    return `http://${localhost}:3000`
+    if (localhost) {
+      console.log('Using API Base URL:', `http://${localhost}:3000`)
+      return `http://${localhost}:3000`
+    }
+  } catch (e) {
+    console.warn('Failed to get debugger host:', e)
   }
 
   // 默认回退到 localhost (模拟器或 Web 环境)
