@@ -1,14 +1,35 @@
 import * as React from 'react';
 import { TextInput } from 'react-native';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '~/lib/utils';
 
-const Input = React.forwardRef<React.ElementRef<typeof TextInput>, React.ComponentPropsWithoutRef<typeof TextInput>>(
-  ({ className, placeholderTextColor, ...props }, ref) => {
+const inputVariants = cva(
+  'web:flex web:w-full rounded-md border border-input bg-background px-3 web:py-2 text-foreground placeholder:text-muted-foreground web:ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2',
+  {
+    variants: {
+      size: {
+        default: 'h-10 native:h-12 text-base lg:text-sm native:text-lg native:leading-[1.25]',
+        sm: 'h-8 native:h-10 text-xs native:text-sm',
+        lg: 'h-14 native:h-[72px] text-lg native:text-xl',
+      },
+    },
+    defaultVariants: {
+      size: 'default',
+    },
+  }
+);
+
+interface InputProps
+  extends React.ComponentPropsWithoutRef<typeof TextInput>,
+    VariantProps<typeof inputVariants> {}
+
+const Input = React.forwardRef<React.ElementRef<typeof TextInput>, InputProps>(
+  ({ className, placeholderTextColor, size, ...props }, ref) => {
     return (
       <TextInput
         ref={ref}
         className={cn(
-          'web:flex h-10 native:h-12 web:w-full rounded-md border border-input bg-background px-3 web:py-2 text-base lg:text-sm native:text-lg native:leading-[1.25] text-foreground placeholder:text-muted-foreground web:ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2',
+          inputVariants({ size }),
           props.editable === false && 'opacity-50 web:cursor-not-allowed',
           className
         )}

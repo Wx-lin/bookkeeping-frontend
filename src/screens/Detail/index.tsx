@@ -1,88 +1,90 @@
-import { useState, useMemo } from 'react';
-import { View, SectionList, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useQuery } from '@tanstack/react-query';
-import { format, startOfMonth, endOfMonth, isToday, isYesterday, parseISO } from 'date-fns';
-import { zhCN } from 'date-fns/locale';
-import { ChevronDown, Plus, List, PieChart, Wallet } from 'lucide-react-native';
-import { api, Transaction } from '~/lib/api';
-import { SummaryCard } from '~/components/summary-card';
-import { TransactionItem } from '~/components/transaction-item';
-import { iconWithClassName } from '~/lib/icons/icon-with-classname';
-import { ThemeToggle } from '~/components/theme-toggle';
-import { Text } from '~/components/ui/text';
+import { useState, useMemo } from 'react'
+import { View, SectionList, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { useQuery } from '@tanstack/react-query'
+import { format, startOfMonth, endOfMonth, isToday, isYesterday, parseISO } from 'date-fns'
+import { zhCN } from 'date-fns/locale'
+import { ChevronDown, Plus, List, PieChart, Wallet } from 'lucide-react-native'
+import { api, Transaction } from '~/lib/api'
+import { SummaryCard } from '~/components/summary-card'
+import { TransactionItem } from './components/transaction-item'
+import { iconWithClassName } from '~/lib/icons/icon-with-classname'
+import { ThemeToggle } from '~/components/theme-toggle'
+import { Text } from '~/components/ui/text'
 
-iconWithClassName(ChevronDown);
-iconWithClassName(Plus);
-iconWithClassName(List);
-iconWithClassName(PieChart);
-iconWithClassName(Wallet);
+iconWithClassName(ChevronDown)
+iconWithClassName(Plus)
+iconWithClassName(List)
+iconWithClassName(PieChart)
+iconWithClassName(Wallet)
 
 export default function DetailScreen() {
-  const [currentDate] = useState(new Date());
+  const [currentDate] = useState(new Date())
 
-  const startDate = format(startOfMonth(currentDate), 'yyyy-MM-dd');
-  const endDate = format(endOfMonth(currentDate), 'yyyy-MM-dd');
+  const startDate = format(startOfMonth(currentDate), 'yyyy-MM-dd')
+  const endDate = format(endOfMonth(currentDate), 'yyyy-MM-dd')
 
   const { data: transactions, isLoading } = useQuery({
     queryKey: ['transactions', startDate, endDate],
     queryFn: async () => {
-      const res = await api.transactions.list({ startDate, endDate });
-      return res.data;
+      const res = await api.transactions.list({ startDate, endDate })
+      return res.data
     },
-  });
+  })
 
   // Calculate Summary
   const summary = useMemo(() => {
-    let income = 0;
-    let expense = 0;
-    
+    let income = 0
+    let expense = 0
+
     if (transactions) {
       transactions.forEach((t) => {
-        if (t.type === 'INCOME') income += Number(t.amount);
-        else if (t.type === 'EXPENSE') expense += Number(t.amount);
-      });
+        if (t.type === 'INCOME') income += Number(t.amount)
+        else if (t.type === 'EXPENSE') expense += Number(t.amount)
+      })
     }
 
-    return { income, expense, balance: income - expense };
-  }, [transactions]);
+    return { income, expense, balance: income - expense }
+  }, [transactions])
 
   // Group Transactions
   const sections = useMemo(() => {
-    if (!transactions) return [];
+    if (!transactions) return []
 
-    const grouped: { [key: string]: Transaction[] } = {};
-    
+    const grouped: { [key: string]: Transaction[] } = {}
+
     transactions.forEach((t) => {
       // Assuming t.date is 'yyyy-MM-dd' or ISO string
-      const dateParts = t.date.split('T');
-      const dateStr = dateParts[0];
-      
-      if (!dateStr) return;
+      const dateParts = t.date.split('T')
+      const dateStr = dateParts[0]
 
-      if (!grouped[dateStr]) grouped[dateStr] = [];
-      grouped[dateStr]?.push(t);
-    });
+      if (!dateStr) return
 
-    const result = Object.keys(grouped).sort((a, b) => b.localeCompare(a)).map(dateStr => {
-      const date = parseISO(dateStr);
-      let title = format(date, 'MM月dd日', { locale: zhCN });
-      
-      if (isToday(date)) title = `今天, ${title}`;
-      else if (isYesterday(date)) title = `昨天, ${title}`;
-      else {
+      if (!grouped[dateStr]) grouped[dateStr] = []
+      grouped[dateStr]?.push(t)
+    })
+
+    const result = Object.keys(grouped)
+      .sort((a, b) => b.localeCompare(a))
+      .map((dateStr) => {
+        const date = parseISO(dateStr)
+        let title = format(date, 'MM月dd日', { locale: zhCN })
+
+        if (isToday(date)) title = `今天, ${title}`
+        else if (isYesterday(date)) title = `昨天, ${title}`
+        else {
           // Add day of week
-          const dayOfWeek = format(date, 'EEEE', { locale: zhCN }); // e.g., 星期X
-          title = `${title} ${dayOfWeek}`;
-      }
+          const dayOfWeek = format(date, 'EEEE', { locale: zhCN }) // e.g., 星期X
+          title = `${title} ${dayOfWeek}`
+        }
 
-      return {
-        title,
-        data: grouped[dateStr] || []
-      };
-    });
+        return {
+          title,
+          data: grouped[dateStr] || [],
+        }
+      })
 
-    return result;
-  }, [transactions]);
+    return result
+  }, [transactions])
 
   const renderHeader = () => (
     <View className="px-4 pt-12 pb-4">
@@ -92,27 +94,21 @@ export default function DetailScreen() {
           <Text className="text-xl font-bold mr-1">
             {format(currentDate, 'MM月', { locale: zhCN })}
           </Text>
-           <Text className="text-base mr-2">
-            {format(currentDate, 'LLLL', { locale: zhCN })}
-          </Text>
+          <Text className="text-base mr-2">{format(currentDate, 'LLLL', { locale: zhCN })}</Text>
           <ChevronDown className="h-4 w-4 text-foreground" />
         </TouchableOpacity>
-        
+
         <View>
-            <ThemeToggle />
+          <ThemeToggle />
         </View>
       </View>
-      
+
       <Text className="text-3xl font-extrabold mb-6">明细</Text>
 
       {/* Summary Card */}
-      <SummaryCard 
-        income={summary.income} 
-        expense={summary.expense} 
-        balance={summary.balance} 
-      />
+      <SummaryCard income={summary.income} expense={summary.expense} balance={summary.balance} />
     </View>
-  );
+  )
 
   return (
     <View className="flex-1 bg-background relative">
@@ -138,7 +134,7 @@ export default function DetailScreen() {
       )}
 
       {/* Floating Action Button */}
-      <TouchableOpacity 
+      <TouchableOpacity
         className="absolute bottom-24 right-6 h-14 w-14 rounded-full bg-primary items-center justify-center shadow-lg z-10"
         activeOpacity={0.8}
       >
@@ -151,17 +147,17 @@ export default function DetailScreen() {
           <List className="h-6 w-6 text-primary mb-1" />
           <Text className="text-xs text-primary font-medium">明细</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity className="items-center justify-center">
           <PieChart className="h-6 w-6 text-muted-foreground mb-1" />
           <Text className="text-xs text-muted-foreground font-medium">统计</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity className="items-center justify-center">
           <Wallet className="h-6 w-6 text-muted-foreground mb-1" />
           <Text className="text-xs text-muted-foreground font-medium">资产</Text>
         </TouchableOpacity>
       </View>
     </View>
-  );
+  )
 }
