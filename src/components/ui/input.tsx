@@ -10,7 +10,7 @@ const inputVariants = cva(
       size: {
         default: 'h-10 native:h-12 text-base lg:text-sm native:text-lg native:leading-[1.25]',
         sm: 'h-8 native:h-10 text-xs native:text-sm',
-        lg: 'h-14 native:h-[72px] text-lg native:text-xl',
+        lg: 'h-14 native:h-[62px] text-lg native:text-xl',
       },
     },
     defaultVariants: {
