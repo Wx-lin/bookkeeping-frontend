@@ -1,8 +1,9 @@
 import { Tabs, Redirect } from 'expo-router';
 import { List, PieChart, Wallet } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
-import { Platform } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { useAuthStore } from '~/stores/auth';
+import { BlurView } from 'expo-blur';
 
 import { iconWithClassName } from '~/lib/icons/icon-with-classname';
 
@@ -24,12 +25,21 @@ export default function AppLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: isDark ? '#1c1917' : '#ffffff',
-          borderTopColor: isDark ? '#292524' : '#e5e5e5',
+          position: 'absolute',
+          borderTopWidth: 0,
+          elevation: 0,
           height: Platform.OS === 'ios' ? 88 : 68,
           paddingBottom: Platform.OS === 'ios' ? 28 : 10,
           paddingTop: 10,
+          backgroundColor: 'transparent',
         },
+        tabBarBackground: () => (
+          <BlurView
+            intensity={80}
+            tint={isDark ? 'systemThinMaterialDark' : 'systemThinMaterialLight'}
+            style={StyleSheet.absoluteFill}
+          />
+        ),
         tabBarActiveTintColor: '#f59e0b', // amber-500
         tabBarInactiveTintColor: isDark ? '#a8a29e' : '#78716c',
       }}
@@ -38,21 +48,21 @@ export default function AppLayout() {
         name="index"
         options={{
           title: '明细',
-          tabBarIcon: ({ color }) => <List className="w-6 h-6" color={color} />,
+          tabBarIcon: ({ color }: { color: string }) => <List className="w-6 h-6" color={color} />,
         }}
       />
       <Tabs.Screen
         name="stats"
         options={{
           title: '统计',
-          tabBarIcon: ({ color }) => <PieChart className="w-6 h-6" color={color} />,
+          tabBarIcon: ({ color }: { color: string }) => <PieChart className="w-6 h-6" color={color} />,
         }}
       />
       <Tabs.Screen
         name="assets"
         options={{
           title: '资产',
-          tabBarIcon: ({ color }) => <Wallet className="w-6 h-6" color={color} />,
+          tabBarIcon: ({ color }: { color: string }) => <Wallet className="w-6 h-6" color={color} />,
         }}
       />
     </Tabs>
