@@ -10,7 +10,7 @@ import { cn } from '~/lib/utils'
 import { iconWithClassName } from '~/lib/icons/icon-with-classname'
 import { api } from '~/lib/api'
 import { useAuthStore } from '~/stores/auth'
-import { useRouter } from '@tanstack/react-router'
+import { useRouter } from 'expo-router'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner-native'
 
@@ -23,7 +23,7 @@ iconWithClassName(Wallet)
 
 type AuthMode = 'login' | 'register'
 
-export function AuthPage() {
+export default function AuthPage() {
   const router = useRouter()
   const [mode, setMode] = useState<AuthMode>('login')
   const [email, setEmail] = useState('')
@@ -38,7 +38,7 @@ export function AuthPage() {
       // 这里的 data 已经是 AuthResponse，因为拦截器处理过
       await login(data.token, data.user)
       toast.success('登录成功')
-      router.navigate({ to: '/' })
+      router.replace('/')
     },
     onError: (error: any) => {
       const msg = error.response?.data?.message || error.message || '登录失败'
@@ -51,7 +51,7 @@ export function AuthPage() {
     onSuccess: async (data: any) => {
       await login(data.access_token, data.user)
       toast.success('注册成功')
-      router.navigate({ to: '/' })
+      router.replace('/')
     },
     onError: (error: any) => {
       const msg = error.response?.data?.message || error.message || '注册失败'

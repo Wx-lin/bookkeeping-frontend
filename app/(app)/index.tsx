@@ -3,21 +3,19 @@ import { View, SectionList, TouchableOpacity, ActivityIndicator } from 'react-na
 import { useQuery } from '@tanstack/react-query'
 import { format, startOfMonth, endOfMonth, isToday, isYesterday, parseISO } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
-import { ChevronDown, Plus, List, PieChart, Wallet } from 'lucide-react-native'
+import { ChevronDown, Plus } from 'lucide-react-native'
 import { api, Transaction } from '~/lib/api'
 import { SummaryCard } from '~/components/summary-card'
-import { TransactionItem } from './components/transaction-item'
+import { TransactionItem } from '~/components/transaction-item'
 import { iconWithClassName } from '~/lib/icons/icon-with-classname'
 import { ThemeToggle } from '~/components/theme-toggle'
 import { Text } from '~/components/ui/text'
+import { toast } from 'sonner-native'
 
 iconWithClassName(ChevronDown)
 iconWithClassName(Plus)
-iconWithClassName(List)
-iconWithClassName(PieChart)
-iconWithClassName(Wallet)
 
-export default function DetailScreen() {
+export default function HomeScreen() {
   const [currentDate] = useState(new Date())
 
   const startDate = format(startOfMonth(currentDate), 'yyyy-MM-dd')
@@ -135,29 +133,12 @@ export default function DetailScreen() {
 
       {/* Floating Action Button */}
       <TouchableOpacity
-        className="absolute bottom-24 right-6 h-14 w-14 rounded-full bg-primary items-center justify-center shadow-lg z-10"
+        className="absolute bottom-6 right-6 h-14 w-14 rounded-full bg-primary items-center justify-center shadow-lg z-10"
         activeOpacity={0.8}
+        onPress={() => toast.info('记账功能开发中')}
       >
         <Plus className="h-8 w-8 text-primary-foreground" />
       </TouchableOpacity>
-
-      {/* Bottom Tab Bar (Mock) */}
-      <View className="absolute bottom-0 left-0 right-0 bg-card border-t border-border h-20 flex-row items-center justify-around pb-4">
-        <TouchableOpacity className="items-center justify-center">
-          <List className="h-6 w-6 text-primary mb-1" />
-          <Text className="text-xs text-primary font-medium">明细</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity className="items-center justify-center">
-          <PieChart className="h-6 w-6 text-muted-foreground mb-1" />
-          <Text className="text-xs text-muted-foreground font-medium">统计</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity className="items-center justify-center">
-          <Wallet className="h-6 w-6 text-muted-foreground mb-1" />
-          <Text className="text-xs text-muted-foreground font-medium">资产</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   )
 }

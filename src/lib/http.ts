@@ -2,6 +2,7 @@ import axios from 'axios'
 import Constants from 'expo-constants'
 import { useAuthStore } from '~/stores/auth'
 import { toast } from 'sonner-native'
+import { router } from 'expo-router'
 
 // 动态获取开发环境的主机 IP
 const getBaseUrl = () => {
@@ -66,8 +67,15 @@ http.interceptors.response.use(
       switch (error.response.status) {
         case 401:
           // 401 未授权，登出并跳转
+          console.log('Token expired, logging out...')
           toast.error('登录过期', { description: '请重新登录' })
+          
+          // 仅调用 logout，让 app/_layout.tsx 中的 useEffect 负责跳转
+          // 这样可以避免 HTTP 拦截器和 RootLayout 同时尝试跳转导致的 POP_TO_TOP 错误
+          console.log('Triggering logout action...')
           useAuthStore.getState().logout()
+            .then(() => console.log('Logout action completed, state updated'))
+            .catch(err => console.error('Logout failed:', err))
           break
         case 403:
           toast.error('权限不足', { description: message })
