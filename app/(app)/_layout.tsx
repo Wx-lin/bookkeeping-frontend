@@ -34,9 +34,8 @@ export default function AppLayout() {
           backgroundColor: 'transparent',
         },
         tabBarBackground: () => (
-          <BlurView
-            intensity={80}
-            tint={isDark ? 'systemThinMaterialDark' : 'systemThinMaterialLight'}
+          <LiquidGlassView
+            effect="regular"
             style={StyleSheet.absoluteFill}
           />
         ),
